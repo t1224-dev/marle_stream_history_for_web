@@ -241,6 +241,25 @@ function copyVideoInfo(video) {
 
 // クリップボードにコピーするフォールバック関数
 function fallbackCopyToClipboard(text) {
+    // モダンなClipboard APIを試す
+    if (navigator.clipboard && window.isSecureContext) {
+        // セキュアコンテキスト（HTTPS）でNavigator clipboard APIを使用
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                showCopyMessage('クリップボードにコピーしました！');
+            })
+            .catch(err => {
+                console.error('Clipboard API エラー:', err);
+                legacyCopyToClipboard(text);
+            });
+    } else {
+        // フォールバック手法を使用
+        legacyCopyToClipboard(text);
+    }
+}
+
+// レガシーなコピー方法（フォールバック）
+function legacyCopyToClipboard(text) {
     // テキストエリアを作成
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -267,7 +286,7 @@ function fallbackCopyToClipboard(text) {
     if (successful) {
         showCopyMessage('クリップボードにコピーしました！');
     } else {
-        showCopyMessage('コピーに失敗しました。');
+        showCopyMessage('コピーに失敗しました。手動でコピーしてください。');
     }
 }
 

@@ -84,14 +84,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Data Loading ---
     async function loadVideoData() {
         try {
-            const response = await fetch('assets/data/videos.json');
+            console.log('動画データの読み込みを開始します...');
+            const response = await fetch('assets/data/videos.json', {
+                method: 'GET',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            allVideos = await response.json();
-            console.log('動画データを読み込みました:', allVideos);
-            // JSON読み込み後に初期ページ読み込みを実行
-            initializeAppUI();
+            
+            // レスポンステキストを取得
+            const text = await response.text();
+            
+            try {
+                // テキストからJSONを解析
+                allVideos = JSON.parse(text);
+                console.log('動画データを読み込みました:', allVideos.length + '件');
+                // JSON読み込み後に初期ページ読み込みを実行
+                initializeAppUI();
+            } catch (parseError) {
+                console.error('JSONの解析に失敗しました:', parseError);
+                console.log('受信したJSONの一部:', text.substring(0, 500) + '...');
+                content.innerHTML = '<p>動画データの解析に失敗しました。</p>';
+            }
         } catch (error) {
             console.error('動画データの読み込みに失敗しました:', error);
             content.innerHTML = '<p>動画データの読み込みに失敗しました。</p>';
