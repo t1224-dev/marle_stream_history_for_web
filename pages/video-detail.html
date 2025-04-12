@@ -1,0 +1,51 @@
+<div class="video-detail-container">
+    <div id="video-loading" class="loading-container">
+        <p>動画情報を読み込み中...</p>
+    </div>
+    
+    <div id="video-content" class="video-content" style="display: none;">
+        <!-- 動画エリア -->
+        <div class="video-player-container">
+            <div class="video-player">
+                <!-- 動画のサムネイル画像（クリックでYouTubeに移動） -->
+                <div id="video-thumbnail" class="thumbnail-container">
+                    <img src="" alt="動画サムネイル" id="thumbnail-img" />
+                </div>
+            </div>
+        </div>
+        
+        <!-- 動画情報エリア -->
+        <div class="video-info-container">
+            <h1 id="video-title" class="video-title"></h1>
+            
+            <div class="video-meta">
+                <div class="video-stats">
+                    <span id="view-count"><i class="fas fa-eye"></i> - 回視聴</span>
+                    <span id="published-date"><i class="fas fa-calendar-alt"></i> -</span>
+                    <span id="video-duration"><i class="fas fa-clock"></i> -</span>
+                </div>
+                
+                <div id="video-tags" class="video-tags">
+                    <!-- タグはJSで動的に生成 -->
+                </div>
+            </div>
+            
+            <div class="video-description-container">
+                <h3>概要</h3>
+                <div id="video-description" class="video-description">
+                    <!-- 説明文はJSで挿入 -->
+                </div>
+            </div>
+            
+            <!-- 戻るボタン（PC表示ではここに配置） -->
+            <div class="back-button-container pc-only">
+                <button id="back-button-top" class="back-button"><i class="fas fa-arrow-left"></i> 戻る</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 戻るボタン（モバイル表示用） -->
+    <div class="back-button-container mobile-only">
+        <button id="back-button" class="back-button"><i class="fas fa-arrow-left"></i> 戻る</button>
+    </div>
+</div> 
