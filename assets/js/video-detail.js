@@ -199,6 +199,8 @@ function addShareButton(video) {
     
     // コピーコンテナをvideo-metaに追加
     metaContainer.appendChild(copyContainer);
+    
+    console.log('コピーボタンを追加しました');
 }
 
 // 動画情報をコピーする関数
@@ -241,6 +243,12 @@ function copyVideoInfo(video) {
 
 // クリップボードにコピーするフォールバック関数
 function fallbackCopyToClipboard(text) {
+    // Github Pages環境では常にフォールバック手法を使用
+    // セキュリティ制限によりClipboard APIが使えない場合があるため
+    legacyCopyToClipboard(text);
+    
+    // 以下のコードは参考のために残しておく（現在は使用しない）
+    /*
     // モダンなClipboard APIを試す
     if (navigator.clipboard && window.isSecureContext) {
         // セキュアコンテキスト（HTTPS）でNavigator clipboard APIを使用
@@ -256,6 +264,7 @@ function fallbackCopyToClipboard(text) {
         // フォールバック手法を使用
         legacyCopyToClipboard(text);
     }
+    */
 }
 
 // レガシーなコピー方法（フォールバック）
@@ -461,4 +470,4 @@ function addXSpaceLink(video) {
 }
 
 // グローバルスコープへエクスポート
-window.initVideoDetailPage = initVideoDetailPage; 
+window.initVideoDetailPage = initVideoDetailPage;
