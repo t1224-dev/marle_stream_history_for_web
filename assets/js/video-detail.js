@@ -205,66 +205,95 @@ function addShareButton(video) {
 
 // 動画情報をコピーする関数
 function copyVideoInfo(video) {
-    // 配信日を整形（単純にYYYY年MM月DD日形式に変換）
-    let jpDate = '日付不明';
-    if (video.publishedAt) {
-        try {
-            // データの publishedAt から直接年月日を抽出
-            const dateParts = video.publishedAt.split('T')[0].split('-');
-            const year = dateParts[0];
-            const month = dateParts[1];
-            const day = dateParts[2];
-            jpDate = `${year}年${month}月${day}日`;
-        } catch (e) {
-            console.error('日付処理中にエラー:', e);
+    try {
+        // 配信日を整形（単純にYYYY年MM月DD日形式に変換）
+        let jpDate = '日付不明';
+        if (video.publishedAt) {
+            try {
+                // データの publishedAt から直接年月日を抽出
+                const dateParts = video.publishedAt.split('T')[0].split('-');
+                const year = dateParts[0];
+                const month = dateParts[1];
+                const day = dateParts[2];
+                jpDate = `${year}年${month}月${day}日`;
+            } catch (e) {
+                console.error('日付処理中にエラー:', e);
+            }
         }
+        
+        // スペースタグを持つかどうか確認
+        const isSpace = video.tags && Array.isArray(video.tags) && video.tags.includes('スペース');
+        
+        // コピー用テキストの基本部分
+        let baseText = `${jpDate}にマール・アストレアさんが配信しました\n${video.title}`;
+        
+        // コピー用テキストを完成させる
+        let copyText = '';
+        if (isSpace && video.videoId) {
+            // スペースの場合：日時＋タイトル＋URL＋ハッシュタグ
+            const spaceUrl = `https://x.com/i/spaces/${video.videoId}`;
+            copyText = `${baseText}\n${spaceUrl}\n#マールの軌跡`;
+        } else {
+            // スペース以外の場合：日時＋タイトル＋ハッシュタグ
+            copyText = `${baseText}\n#マールの軌跡`;
+        }
+        
+        // クリップボードにコピー
+        safelyCopyToClipboard(copyText);
+    } catch (err) {
+        console.error('テキスト生成中にエラー:', err);
+        showCopyMessage('コピーに失敗しました。');
     }
-    
-    // スペースタグを持つかどうか確認
-    const isSpace = video.tags && Array.isArray(video.tags) && video.tags.includes('スペース');
-    
-    // コピー用テキストの基本部分
-    let baseText = `${jpDate}にマール・アストレアさんが配信しました\n${video.title}`;
-    
-    // コピー用テキストを完成させる
-    let copyText = '';
-    if (isSpace && video.videoId) {
-        // スペースの場合：日時＋タイトル＋URL＋ハッシュタグ
-        const spaceUrl = `https://x.com/i/spaces/${video.videoId}`;
-        copyText = `${baseText}\n${spaceUrl}\n#マールの軌跡`;
-    } else {
-        // スペース以外の場合：日時＋タイトル＋ハッシュタグ
-        copyText = `${baseText}\n#マールの軌跡`;
-    }
-    
-    // クリップボードにコピー
-    fallbackCopyToClipboard(copyText);
 }
 
-// クリップボードにコピーするフォールバック関数
-function fallbackCopyToClipboard(text) {
-    // Github Pages環境では常にフォールバック手法を使用
-    // セキュリティ制限によりClipboard APIが使えない場合があるため
-    legacyCopyToClipboard(text);
+// 環境によって最適なコピー方法を選択する関数
+function safelyCopyToClipboard(text) {
+    // GitHub Pages環境の検出（より信頼性の高い方法）
+    const isGitHubPages = detectGitHubPagesEnvironment();
     
-    // 以下のコードは参考のために残しておく（現在は使用しない）
-    /*
-    // モダンなClipboard APIを試す
-    if (navigator.clipboard && window.isSecureContext) {
-        // セキュアコンテキスト（HTTPS）でNavigator clipboard APIを使用
-        navigator.clipboard.writeText(text)
-            .then(() => {
-                showCopyMessage('クリップボードにコピーしました！');
-            })
-            .catch(err => {
-                console.error('Clipboard API エラー:', err);
-                legacyCopyToClipboard(text);
-            });
+    // GitHub Pages環境または非セキュアコンテキストでは常にフォールバック
+    if (isGitHubPages || !window.isSecureContext) {
+        console.log('GitHubPages環境または非セキュアコンテキスト: フォールバック使用');
+        legacyCopyToClipboard(text);
+        return;
+    }
+    
+    // 最新のClipboard APIが利用可能な場合はそれを使用
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        try {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showCopyMessage('クリップボードにコピーしました！');
+                })
+                .catch(err => {
+                    console.error('Clipboard API エラー:', err);
+                    legacyCopyToClipboard(text);
+                });
+        } catch (e) {
+            console.error('Clipboard API例外:', e);
+            legacyCopyToClipboard(text);
+        }
     } else {
-        // フォールバック手法を使用
+        // APIが利用できない場合はフォールバック
+        console.log('Clipboard API利用不可: フォールバック使用');
         legacyCopyToClipboard(text);
     }
-    */
+}
+
+// GitHub Pages環境かどうかを検出する関数
+function detectGitHubPagesEnvironment() {
+    try {
+        // URLからGitHub Pages環境かどうかを判定
+        const hostname = window.location.hostname;
+        return (
+            hostname.endsWith('github.io') || 
+            hostname.includes('.github.') || 
+            hostname.includes('github.pages.')
+        );
+    } catch (e) {
+        console.error('環境検出エラー:', e);
+        return false;
+    }
 }
 
 // レガシーなコピー方法（フォールバック）

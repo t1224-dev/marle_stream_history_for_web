@@ -135,6 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 content.innerHTML = pageHtml;
                 content.dataset.currentPage = pageName;
                 
+                // ページトップへスクロール（オプションで無効化可能）
+                if (options.scrollToTop !== false) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                
                 // 履歴の更新（履歴ナビゲーションでない場合のみ）
                 if (!options.isHistoryNav) {
                     const newUrl = `#video-detail?id=${options.videoId}`;
@@ -165,6 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
             content.innerHTML = pageHtml;
             content.dataset.currentPage = pageName; // 現在のページ名を記録
             console.log(`${pageName} ページを読み込みました`);
+            
+            // ページトップへスクロール（オプションで無効化可能）
+            if (options.scrollToTop !== false) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
             
             // 履歴の更新（履歴ナビゲーションでない場合のみ）
             if (!options.isHistoryNav) {

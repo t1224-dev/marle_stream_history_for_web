@@ -217,6 +217,14 @@ function handleDateClick(dateStr, headerElement, videosContainer, allVideos, dis
             headerElement.textContent += ` (${videosOnDate.length}件の配信)`;
             displayVideosFunc(videosOnDate, videosContainer); // app.js の関数を呼び出す
             console.log(`[calendar.js] ${dateStr} の動画 ${videosOnDate.length} 件を表示しました`);
+            
+            // 動画が存在する場合は、滑らかにスクロール
+            if (!isInitial) { // 初期表示時はスクロールしない
+                setTimeout(() => {
+                    // 選択された日付のヘッダー位置までスクロール
+                    headerElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100); // 少し遅延させてDOMが更新された後にスクロール
+            }
         } else {
             if (!isInitial) { // 初期表示時以外はメッセージ表示
                  videosContainer.innerHTML = '<p class="no-videos-message">この日の配信はありません。</p>';
