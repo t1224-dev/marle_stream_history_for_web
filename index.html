@@ -4,50 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='shortcut icon' type='image/x-icon' href='assets/data/icons/favicon.ico' />
-    <title>マールの軌跡 Web版</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- FullCalendar CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
+    <title>リダイレクト中...</title>
+    <meta http-equiv="refresh" content="0; url=https://marleastraea.com/">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #A0E1F7, #D8C9FF);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .redirect-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        p {
+            margin: 0.5rem 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #A0E1F7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem 0;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .redirect-link {
+            color: #A0E1F7;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 2px solid #A0E1F7;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .redirect-link:hover {
+            background-color: #A0E1F7;
+            color: white;
+        }
+    </style>
+    <script>
+        /// 自動リダイレクト処理
+        window.onload = function() {
+            // 2秒後にリダイレクト
+            setTimeout(function() {
+                window.location.href = 'https://marleastraea.com/';
+            }, 2000);
+        };
+    </script>
 </head>
 <body>
-    <header>
-        <h1>マールの軌跡</h1>
-    </header>
-
-    <main id="app-content">
-        <!-- 各画面のコンテンツがここに動的に読み込まれます -->
-        <p>読み込み中...</p>
-    </main>
-
-    <footer>
-        <nav>
-            <a href="#home" class="nav-item active" data-page="home">
-                <i class="fas fa-home"></i>
-                <span>ホーム</span>
-            </a>
-            <a href="#calendar" class="nav-item" data-page="calendar">
-                <i class="fas fa-calendar-alt"></i>
-                <span>カレンダー</span>
-            </a>
-            <a href="#search" class="nav-item" data-page="search">
-                <i class="fas fa-search"></i>
-                <span>検索</span>
-            </a>
-        </nav>
-        <p>&copy; 2025 マールの軌跡 Web版</p>
-    </footer>
-
-    <!-- FullCalendar JS -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-    <!-- 日本語ロケール（個別） -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/locales/ja.global.min.js"></script>
-    
-    <!-- ユーティリティスクリプト -->
-    <script src="assets/js/search.js" defer></script> <!-- Search script -->
-    <script src="assets/js/calendar.js" defer></script> <!-- Calendar script -->
-    <script src="assets/js/video-detail.js" defer></script> <!-- Video Detail script -->
-    <script src="assets/js/app.js" defer></script> <!-- Main App script -->
+    <div class="redirect-container">
+        <h1>リダイレクト中...</h1>
+        <div class="loading"></div>
+        <p>このサイトは移転しました。</p>
+        <p>新しいサイトに自動的に移動します。</p>
+        <p>自動的に移動しない場合は、下記のリンクをクリックしてください。</p>
+        <a href="https://marleastraea.com/" class="redirect-link">新しいサイトへ移動</a>
+    </div>
 </body>
 </html> 
